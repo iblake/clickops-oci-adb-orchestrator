@@ -1,6 +1,6 @@
 # Terraform OCI Autonomous Database Module for LZ orchestrator
 
-This module provisions one or more **Autonomous Databases (ADB)** in **Oracle Cloud Infrastructure (OCI)**, designed for seamless integration with the **OCI Landing Zone Orchestrator**. It supports flexible configuration, dependency resolution, and advanced networking and security options.
+This module provisions one or more Autonomous Databases (ADB) in Oracle Cloud Infrastructure (OCI), and is intended to integrate with a [Forked version of LZ Orchestrator](https://github.com/iblake/clickops-terraform-oci-modules-orchestrator).
 
 ---
 
