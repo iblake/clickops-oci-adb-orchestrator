@@ -116,40 +116,10 @@ This example creates a basic ADB with the minimum required configuration.
   
   "autonomous_databases_configuration": {
     "default_compartment_id": "ocid1.compartment.oc1..xxxxxxxxxxxxxxxxx",
-    "default_defined_tags": {},
-    "default_freeform_tags": {
-      "Project": "enterprise-app",
-      "ManagedBy": "terraform-orchestrator",
-      "Service": "autonomous-database",
-      "CostCenter": "IT-Database",
-      "Environment": "Production"
-    },
-    
     "autonomous_databases": {
       "atp-app1": {
         "db_name": "dgcADB1",
-        "display_name": "ATP Application 1",
-        "compartment_id": null,
-        "cpu_core_count": 1,
-        "data_storage_size_in_tbs": 1,
-        "compute_model": "ECPU",
-        "db_workload": "OLTP",
-        "db_version": "19c",
-        "is_auto_scaling_enabled": false,
-        "is_auto_scaling_for_storage_enabled": false,
-        "license_model": "BRING_YOUR_OWN_LICENSE",
-        "admin_password": "XXXXXXXXXXXX",
-        "is_mtls_connection_required": true,
-        "subnet_id": null,
-        "nsg_ids": [],
-        "private_endpoint_label": null,
-        "is_free_tier": false,
-        "is_dedicated": false,
-        "kms_key_id": null,
-        "freeform_tags": {
-          "Application": "web-frontend",
-          "Tier": "database"
-        }
+        "admin_password": "XXXXXXXXXXXX"
       }
     }
   }
