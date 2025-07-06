@@ -1,0 +1,302 @@
+{
+  "_documentation": {
+    "_description": "Complete template for Autonomous Databases using the OCI Landing Zone Orchestrator",
+    "_version": "1.0",
+    "_last_updated": "2024-06-24",
+    "_required_fields": [
+      "tenancy_ocid",
+      "user_ocid", 
+      "fingerprint",
+      "private_key_path",
+      "region",
+      "autonomous_databases_configuration.default_compartment_id",
+      "autonomous_databases_configuration.autonomous_databases.{key}.db_name"
+    ],
+    "_optional_fields": "All other fields are optional with default values"
+  },
+
+  "tenancy_ocid": "ocid1.tenancy.oc1..aaaaaaaa[REQUIRED-TENANCY-OCID]",
+  "user_ocid": "ocid1.user.oc1..aaaaaaaa[REQUIRED-USER-OCID]",
+  "fingerprint": "[REQUIRED-API-KEY-FINGERPRINT]",
+  "private_key_path": "[REQUIRED-PATH-TO-PRIVATE-KEY]",
+  "private_key_password": "[OPTIONAL-PRIVATE-KEY-PASSWORD]",
+  "region": "[REQUIRED-OCI-REGION]",
+
+  "autonomous_databases_configuration": {
+    "_comment": "Main configuration for Autonomous Databases",
+    
+    "default_compartment_id": "ocid1.compartment.oc1..aaaaaaaa[REQUIRED-COMPARTMENT-OCID]",
+    
+    "default_defined_tags": {
+      "_comment": "Defined tags requiring a namespace configured in OCI. OPTIONAL",
+      "_format": "namespace.key",
+      "_example": {
+        "CostTracking.Department": "IT",
+        "Operations.Environment": "Production"
+      },
+      "_note": "Use only if you have namespaces configured in your tenancy"
+    },
+    
+    "default_freeform_tags": {
+      "_comment": "Freeform tags applied to all ADBs. OPTIONAL",
+      "Project": "[OPTIONAL-PROJECT-NAME]",
+      "Environment": "[OPTIONAL-ENVIRONMENT]",
+      "ManagedBy": "[OPTIONAL-MANAGED-BY]",
+      "Owner": "[OPTIONAL-OWNER]",
+      "CostCenter": "[OPTIONAL-COST-CENTER]"
+    },
+    
+    "autonomous_databases": {
+      "_comment": "Map of Autonomous Databases to be created. Key = unique internal name",
+      
+      "adb-example": {
+        "_comment": "Complete example with all possible values",
+        
+        "compartment_id": "[OPTIONAL-SPECIFIC-COMPARTMENT-OCID-OR-KEY]",
+        "_compartment_id_note": "null = use default_compartment_id, OCID = specific compartment, key = reference to dependency",
+        
+        "db_name": "[REQUIRED-DB-NAME]",
+        "_db_name_constraints": "1–14 characters, only letters and numbers, must start with a letter, globally unique",
+        "_db_name_examples": ["MYAPP1", "ANALYTICS", "PROD01"],
+        
+        "display_name": "[OPTIONAL-DISPLAY-NAME]",
+        "_display_name_note": "null = use db_name, string = custom display name",
+        
+        "cpu_core_count": 1,
+        "_cpu_core_count_note": "Number of ECPUs (for ECPU model) or OCPUs (for OCPU model)",
+        "_cpu_core_count_range": "1–128",
+        "_cpu_core_count_default": 1,
+        
+        "data_storage_size_in_tbs": 1,
+        "_data_storage_size_note": "Storage in Terabytes",
+        "_data_storage_size_range": "1–128",
+        "_data_storage_size_default": 1,
+        
+        "compute_model": "ECPU",
+        "_compute_model_options": ["ECPU", "OCPU"],
+        "_compute_model_default": "ECPU",
+        "_compute_model_recommendation": "ECPU for new deployments",
+        
+        "db_workload": "OLTP",
+        "_db_workload_options": ["OLTP", "DW", "AJD", "APEX"],
+        "_db_workload_descriptions": {
+          "OLTP": "Autonomous Transaction Processing (ATP)",
+          "DW": "Autonomous Data Warehouse (ADW)", 
+          "AJD": "Autonomous JSON Database",
+          "APEX": "Oracle APEX Application Development"
+        },
+        "_db_workload_default": "OLTP",
+        
+        "db_version": "19c",
+        "_db_version_options": ["19c", "21c", "23c"],
+        "_db_version_default": "19c",
+        "_db_version_recommendation": "19c for stability, 23c for new features",
+        
+        "is_auto_scaling_enabled": false,
+        "_is_auto_scaling_enabled_note": "Automatically scale CPU based on demand",
+        "_is_auto_scaling_enabled_default": false,
+        
+        "is_auto_scaling_for_storage_enabled": false,
+        "_is_auto_scaling_for_storage_enabled_note": "Automatically scale storage",
+        "_is_auto_scaling_for_storage_enabled_default": false,
+        
+        "license_model": "LICENSE_INCLUDED",
+        "_license_model_options": ["LICENSE_INCLUDED", "BRING_YOUR_OWN_LICENSE"],
+        "_license_model_default": "LICENSE_INCLUDED",
+        "_license_model_cost_note": "BYOL can be more cost-effective if you have Oracle licenses",
+        
+        "admin_password": "[OPTIONAL-ADMIN-PASSWORD]",
+        "_admin_password_requirements": "12–30 characters, 2 uppercase, 2 lowercase, 2 numbers, 2 special characters, must not contain 'admin'",
+        "_admin_password_examples": ["WelcomeOracle123#", "MySecurePass456$"],
+        "_admin_password_note": "null = Oracle auto-generates",
+        
+        "is_mtls_connection_required": true,
+        "_is_mtls_connection_required_note": "true = requires wallet (more secure), false = needs additional network config",
+        "_is_mtls_connection_required_default": false,
+        "_is_mtls_connection_required_recommendation": true,
+        
+        "subnet_id": null,
+        "_subnet_id_note": "null = public ADB, OCID = specific subnet, key = reference to dependency",
+        "_subnet_id_examples": ["ocid1.subnet.oc1..aaaaa", "private-subnet-key", null],
+        
+        "nsg_ids": [],
+        "_nsg_ids_note": "List of Network Security Groups, can be OCIDs or dependency keys",
+        "_nsg_ids_examples": [[], ["ocid1.nsg.oc1..aaaaa"], ["database-nsg-key", "app-nsg-key"]],
+        
+        "private_endpoint_label": null,
+        "_private_endpoint_label_note": "Label for private endpoint, only if subnet_id is set",
+        
+        "is_free_tier": false,
+        "_is_free_tier_note": "true = Always Free (limitations apply), false = regular paid version",
+        "_is_free_tier_limitations": "Only 1 per tenancy, 1 OCPU, 20GB storage, some features limited",
+        "_is_free_tier_default": false,
+        
+        "is_dedicated": false,
+        "_is_dedicated_note": "true = Autonomous Database on Dedicated Exadata Infrastructure",
+        "_is_dedicated_default": false,
+        "_is_dedicated_cost_note": "Significantly more expensive",
+        
+        "kms_key_id": null,
+        "_kms_key_id_note": "null = Oracle Managed Key, OCID = customer managed key, key = reference to dependency",
+        "_kms_key_id_examples": [null, "ocid1.key.oc1..aaaaa", "encryption-key-reference"],
+        
+        "defined_tags": {
+          "_comment": "Defined tags specific to this ADB, merged with default_defined_tags",
+          "_example": {
+            "CostTracking.Application": "WebApp1"
+          }
+        },
+        
+        "freeform_tags": {
+          "_comment": "Freeform tags specific to this ADB, merged with default_freeform_tags",
+          "Application": "[OPTIONAL-APPLICATION-NAME]",
+          "Tier": "[OPTIONAL-TIER]",
+          "Criticality": "[OPTIONAL-CRITICALITY]",
+          "Backup": "[OPTIONAL-BACKUP-SCHEDULE]"
+        }
+      },
+
+      "atp-production": {
+        "_comment": "Production configuration example",
+        "db_name": "ATPPROD",
+        "display_name": "Production ATP Database",
+        "cpu_core_count": 4,
+        "data_storage_size_in_tbs": 2,
+        "compute_model": "ECPU",
+        "db_workload": "OLTP",
+        "db_version": "19c",
+        "is_auto_scaling_enabled": true,
+        "is_auto_scaling_for_storage_enabled": true,
+        "license_model": "LICENSE_INCLUDED",
+        "admin_password": "ProductionPass123#",
+        "is_mtls_connection_required": true,
+        "subnet_id": "private-subnet-prod",
+        "nsg_ids": ["database-nsg", "app-nsg"],
+        "private_endpoint_label": "prod-atp-endpoint",
+        "is_free_tier": false,
+        "is_dedicated": false,
+        "kms_key_id": "encryption-key-prod",
+        "freeform_tags": {
+          "Environment": "production",
+          "Criticality": "high",
+          "Backup": "daily"
+        }
+      },
+
+      "adw-analytics": {
+        "_comment": "Analytics Data Warehouse example",
+        "db_name": "ADWANALYTICS",
+        "display_name": "Analytics Data Warehouse",
+        "cpu_core_count": 8,
+        "data_storage_size_in_tbs": 10,
+        "compute_model": "ECPU",
+        "db_workload": "DW",
+        "db_version": "19c",
+        "is_auto_scaling_enabled": true,
+        "is_auto_scaling_for_storage_enabled": true,
+        "license_model": "BRING_YOUR_OWN_LICENSE",
+        "admin_password": "AnalyticsPass123#",
+        "is_mtls_connection_required": false,
+        "subnet_id": "analytics-subnet",
+        "nsg_ids": ["analytics-nsg"],
+        "is_free_tier": false,
+        "is_dedicated": false,
+        "freeform_tags": {
+          "Purpose": "business-intelligence",
+          "DataSources": "multiple",
+          "Schedule": "batch-processing"
+        }
+      },
+
+      "adb-development": {
+        "_comment": "Development configuration example",
+        "db_name": "ADBDEV",
+        "display_name": "Development Database",
+        "cpu_core_count": 1,
+        "data_storage_size_in_tbs": 1,
+        "compute_model": "ECPU",
+        "db_workload": "OLTP",
+        "is_auto_scaling_enabled": false,
+        "license_model": "LICENSE_INCLUDED",
+        "admin_password": "DevPassword123#",
+        "is_mtls_connection_required": true,
+        "is_free_tier": false,
+        "freeform_tags": {
+          "Environment": "development",
+          "AutoShutdown": "enabled",
+          "TestData": "allowed"
+        }
+      },
+
+      "adb-free-tier": {
+        "_comment": "Always Free configuration example",
+        "db_name": "ADBFREE",
+        "display_name": "Free Tier Database",
+        "cpu_core_count": 1,
+        "data_storage_size_in_tbs": 1,
+        "compute_model": "ECPU",
+        "db_workload": "OLTP",
+        "is_auto_scaling_enabled": false,
+        "license_model": "LICENSE_INCLUDED",
+        "admin_password": "FreePassword123#",
+        "is_mtls_connection_required": true,
+        "is_free_tier": true,
+        "freeform_tags": {
+          "Environment": "testing",
+          "CostModel": "free-tier"
+        }
+      }
+    }
+  },
+
+  "_usage_examples": {
+    "_minimal_config": {
+      "tenancy_ocid": "ocid1.tenancy.oc1..aaaaaaaa[TENANCY]",
+      "user_ocid": "ocid1.user.oc1..aaaaaaaa[USER]",
+      "fingerprint": "[FINGERPRINT]",
+      "private_key_path": "~/.oci/oci_api_key.pem",
+      "region": "eu-madrid-1",
+      "autonomous_databases_configuration": {
+        "default_compartment_id": "ocid1.compartment.oc1..aaaaaaaa[COMPARTMENT]",
+        "autonomous_databases": {
+          "my-adb": {
+            "db_name": "MYADB",
+            "admin_password": "MyPassword123#"
+          }
+        }
+      }
+    },
+    
+    "_production_config": {
+      "comment": "Recommended production configuration with best practices"
+    }
+  },
+
+  "_field_reference": {
+    "required_credentials": [
+      "tenancy_ocid",
+      "user_ocid", 
+      "fingerprint",
+      "private_key_path",
+      "region"
+    ],
+    "required_adb_fields": [
+      "default_compartment_id",
+      "db_name (for each ADB)"
+    ],
+    "recommended_fields": [
+      "admin_password",
+      "is_mtls_connection_required",
+      "freeform_tags"
+    ],
+    "cost_affecting_fields": [
+      "cpu_core_count",
+      "data_storage_size_in_tbs", 
+      "compute_model",
+      "license_model",
+      "is_auto_scaling_enabled",
+      "is_free_tier",
+      "is_dedicated"
+    ]
+  }
+}
